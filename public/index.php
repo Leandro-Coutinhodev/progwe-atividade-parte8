@@ -16,10 +16,10 @@
     //Roteamento simples baseado na ação
     switch ($action) {
         case 'index':
-            $controller->index();
-            break;
-        case 'login':
             $controller->login();
+            break;
+        case 'new':
+            $controller->index();
             break;
         case 'store':
             $controller->store();
@@ -41,6 +41,9 @@
             break;
         case 'deletar':
             $controller->delete();
+            break;
+        case 'logout':
+            $controller->logout();
             break;
         default:
             $controller->index();

@@ -14,10 +14,23 @@ class UsuarioController
     }
 
     public function list(){
+        if(isset($_SESSION['usuario_access'])){
         $erro = $_SESSION['erro'] ?? null;
         unset($_SESSION['erro']);
 
         require '../src/Views/list.php';
+        } else {
+            $_SESSION['erro'] = "Você não tem permissão para acessar esta página";
+            header('Location: index.php?action=index');
+        }
+    }
+
+    public function logout(){
+        if(isset($_SESSION['usuario_access'])){
+            session_destroy();
+            header('Location: index.php?action=index');
+            exit;
+        }
     }
 
     public function login()
@@ -49,7 +62,6 @@ class UsuarioController
 
             //Instancia o Model (cria o objeto Usuario)
             $usuario = Usuario::login($email, $senha);
-            var_dump($usuario);
 
             //Salva usando PDO no banco de dados
             if ($usuario) {
@@ -62,7 +74,7 @@ class UsuarioController
                 exit;
             }else{
                  $_SESSION['erro'] = "Email ou senha incorretos.";
-                header("Location: index.php?action=login");
+                header("Location: index.php?action=index");
                 exit;
             }
 
@@ -108,15 +120,25 @@ class UsuarioController
 
 
             //Validação simples dos dados
-            if (empty($nome) || empty($email) || empty($senha)) {
+            if ((empty($nome) || empty($email) || empty($senha)) && isset($_GET['id'])) {
+                $id = $_GET['id'];
                 $_SESSION['erro'] = "Todos os campos são obrigatórios.";
-                header("Location: index.php?action=index");
+                header("Location: index.php?action=editar&id={$id}");
+                exit;
+            }elseif((empty($nome) || empty($email) || empty($senha))){
+                $_SESSION['erro'] = "Todos os campos são obrigatórios.";
+                header("Location: index.php?action=new");
                 exit;
             }
 
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL) && isset($_GET['id'])) {
+                $id = $_GET['id'];
                 $_SESSION['erro'] = "Email inválido.";
-                header("Location: index.php?action=index");
+                header("Location: index.php?action=editar&id={$id}");
+                exit;
+            }elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+                $_SESSION['erro'] = "Email inválido.";
+                header("Location: index.php?action=new");
                 exit;
             }
 
@@ -124,6 +146,7 @@ class UsuarioController
             $usuario = new Usuario($nome, $email, $senha);
 
             if(isset($_GET['id'])){
+                if(isset($_SESSION['usuario_access'])){
 
                 $id = $_GET['id'];
 
@@ -131,6 +154,11 @@ class UsuarioController
                 $_SESSION['erro'] = "Erro ao atualizar usuário.";
                 header("Location: index.php?action=editar&id={$id}");
                 exit;
+                }else{
+                    $_SESSION['erro'] = "Você não tem permissão para esta ação.";
+                    header('Location: index.php?action=index');
+                    exit;
+                }
                 
             }
             header("Location: index.php?action=list");
@@ -140,7 +168,7 @@ class UsuarioController
             //Salva usando PDO no banco de dados
             if (!$usuario->save()) {
                 $_SESSION['erro'] = "Erro ao salvar no banco de dados.";
-                header("Location: index.php?action=index");
+                header("Location: index.php?action=new");
                 exit;
             }
 
@@ -163,7 +191,7 @@ class UsuarioController
     {
         //Se não houver usuário na sessão, volta para o início
         if (!isset($_SESSION['usuario'])) {
-            header("Location: index.php?action=index");
+            header("Location: index.php?action=new");
             exit;
         }
 
@@ -175,7 +203,7 @@ class UsuarioController
     {
         //Se não houver usuário na sessão, volta para o início
         if (!isset($_SESSION['usuario'])) {
-            header("Location: index.php?action=index");
+            header("Location: index.php?action=new");
             exit;
         }
 

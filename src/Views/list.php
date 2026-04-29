@@ -22,6 +22,15 @@
             form.submit();
             }
         }
+
+        function logout(){
+            if(confirm("Deseja mesmo encerrar a sessão?")){
+                const form =document.getElementById("Frm");
+                form.action = "index.php?action=logout";
+                form.method = "POST";
+                form.submit();
+            }
+        }
     </script>
 </head>
 
@@ -29,7 +38,7 @@
     <div class="container">
         <div class= "card">
             <h2>Lista de Usuários</h2>
-            <h3>Bem vindo, <?php echo $_SESSION['usuario_access']['nome'];?></h3>
+            <h3>Você está logado como: <?php echo $_SESSION['usuario_access']['nome'];?></h3>
 
             <?php if (isset($erro) && $erro): ?>
                 <div class="alert error"><?= htmlspecialchars($erro) ?></div>
@@ -37,7 +46,7 @@
 
             <form id="Frm" method="POST">
             
-                <table border="1">
+                <table>
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -56,14 +65,15 @@
                                 <td>{$usuario['id']}</td>
                                 <td>{$usuario['nome']}</td>
                                 <td>{$usuario['email']}</td>
-                                <td><button onclick='editar({$usuario['id']})'>✏️</button></td>
-                                <td><button onclick='deletar({$usuario['id']})'>❌</button></td>
+                                <td><button class='btn secundary' onclick='editar({$usuario['id']})'>✏️</button></td>
+                                <td><button class='btn secundary' onclick='deletar({$usuario['id']})'>❌</button></td>
                                 </tr>
                                 ";
                             }
                         ?>
                     </tbody>
                 </table>
+                <button type="submit" class="btn primary" onclick="logout()">Logout</button>
 
             </form>
         </div>

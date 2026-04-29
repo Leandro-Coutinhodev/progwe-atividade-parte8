@@ -98,6 +98,10 @@ body {
 
 .btn.secondary:hover { background-color: #e5e7eb; }
 
+.bt-logout {
+    background-color: #991b1b;
+}
+
 .button-group {
     display: flex;
     flex-direction: column;
@@ -145,3 +149,16 @@ body {
 }
 
 .data-display p:last-child { margin-bottom: 0; }
+
+table{
+    width: 100%;
+}
+
+table th{
+    background-color: rgb(17, 17, 107);
+    color: white;
+}
+
+table hr{
+    border-bottom: black;
+}

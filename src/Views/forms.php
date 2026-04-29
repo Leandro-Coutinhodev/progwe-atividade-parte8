@@ -1,3 +1,12 @@
+<?php
+if($_GET['action'] == 'editar') {
+    if(!isset($_SESSION['usuario_access'])){
+        $_SESSION['erro'] = "Você não tem permissão para acessar esta página";
+        header('Location: index.php?action=index');
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 

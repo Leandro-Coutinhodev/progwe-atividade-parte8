@@ -29,8 +29,8 @@
                     <input type="password" id="senha" name="senha" placeholder="Digite a sua senha">    
                 </div>
 
-                <button type="submit" class="btn primary">Enviar Dados</button>
-
+                <button type="submit" class="btn primary">Logar</button>
+                <a href="index.php?action=new">Não possui cadastro?Cadastre-se aqui.</a>
             </form>
         </div>
     </div>

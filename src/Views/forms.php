@@ -73,7 +73,11 @@ if($_GET['action'] == 'editar') {
                 </div>
 
                 <button type="submit" class="btn primary">Enviar Dados</button>
-
+                <?php
+                if($_GET['action'] == 'new'){
+                    echo "<a href='index.php?action=index'>Já possui cadastro?Faça seu login.</a>";
+                }
+                ?>
             </form>
         </div>
     </div>

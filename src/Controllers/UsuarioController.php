@@ -13,20 +13,22 @@ class UsuarioController
         require '../src/Views/forms.php';
     }
 
-    public function list(){
-        if(isset($_SESSION['usuario_access'])){
-        $erro = $_SESSION['erro'] ?? null;
-        unset($_SESSION['erro']);
+    public function list()
+    {
+        if (isset($_SESSION['usuario_access'])) {
+            $erro = $_SESSION['erro'] ?? null;
+            unset($_SESSION['erro']);
 
-        require '../src/Views/list.php';
+            require '../src/Views/list.php';
         } else {
             $_SESSION['erro'] = "Você não tem permissão para acessar esta página";
             header('Location: index.php?action=index');
         }
     }
 
-    public function logout(){
-        if(isset($_SESSION['usuario_access'])){
+    public function logout()
+    {
+        if (isset($_SESSION['usuario_access'])) {
             session_destroy();
             header('Location: index.php?action=index');
             exit;
@@ -41,7 +43,8 @@ class UsuarioController
         require '../src/Views/login.php';
     }
 
-    public function auth(){
+    public function auth()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = trim($_POST['email'] ?? '');
             $senha = trim($_POST['senha'] ?? '');
@@ -72,8 +75,8 @@ class UsuarioController
                 ];
                 header("Location: index.php?action=list");
                 exit;
-            }else{
-                 $_SESSION['erro'] = "Email ou senha incorretos.";
+            } else {
+                $_SESSION['erro'] = "Email ou senha incorretos.";
                 header("Location: index.php?action=index");
                 exit;
             }
@@ -91,17 +94,18 @@ class UsuarioController
         }
     }
 
-    public function delete(){
+    public function delete()
+    {
         $erro = $_SESSION['erro'] ?? null;
         unset($_SESSION['erro']);
 
-        if(isset($_GET['id'])){
+        if (isset($_GET['id'])) {
             $id = $_GET['id'];
-            if(!Usuario::delete($id)){
+            if (!Usuario::delete($id)) {
                 $_SESSION['erro'] = "Erro ao deletar este registro.";
                 header("Location: index.php?action=list");
                 exit;
-            }else{
+            } else {
                 header("Location: index.php?action=list");
                 exit;
             }
@@ -125,7 +129,7 @@ class UsuarioController
                 $_SESSION['erro'] = "Todos os campos são obrigatórios.";
                 header("Location: index.php?action=editar&id={$id}");
                 exit;
-            }elseif((empty($nome) || empty($email) || empty($senha))){
+            } elseif ((empty($nome) || empty($email) || empty($senha))) {
                 $_SESSION['erro'] = "Todos os campos são obrigatórios.";
                 header("Location: index.php?action=new");
                 exit;
@@ -136,7 +140,7 @@ class UsuarioController
                 $_SESSION['erro'] = "Email inválido.";
                 header("Location: index.php?action=editar&id={$id}");
                 exit;
-            }elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $_SESSION['erro'] = "Email inválido.";
                 header("Location: index.php?action=new");
                 exit;
@@ -145,44 +149,44 @@ class UsuarioController
             //Instancia o Model (cria o objeto Usuario)
             $usuario = new Usuario($nome, $email, $senha);
 
-            if(isset($_GET['id'])){
-                if(isset($_SESSION['usuario_access'])){
+            if (isset($_GET['id'])) {
+                if (isset($_SESSION['usuario_access'])) {
 
-                $id = $_GET['id'];
+                    $id = $_GET['id'];
 
-                if (!$usuario->update($id)) {
-                $_SESSION['erro'] = "Erro ao atualizar usuário.";
-                header("Location: index.php?action=editar&id={$id}");
-                exit;
-                }else{
+                    if (!$usuario->update($id)) {
+                        $_SESSION['erro'] = "Erro ao atualizar usuário.";
+                        header("Location: index.php?action=editar&id={$id}");
+                        exit;
+                    }
+
+                } else {
                     $_SESSION['erro'] = "Você não tem permissão para esta ação.";
                     header('Location: index.php?action=index');
                     exit;
                 }
-                
-            }
-            header("Location: index.php?action=list");
+                header("Location: index.php?action=list");
 
-            }else{
+            } else {
 
-            //Salva usando PDO no banco de dados
-            if (!$usuario->save()) {
-                $_SESSION['erro'] = "Erro ao salvar no banco de dados.";
-                header("Location: index.php?action=new");
+                //Salva usando PDO no banco de dados
+                if (!$usuario->save()) {
+                    $_SESSION['erro'] = "Erro ao salvar no banco de dados.";
+                    header("Location: index.php?action=new");
+                    exit;
+                }
+
+                //Guarda o usuário na sessão para exibição após o cadastro
+                $_SESSION['usuario'] = [
+                    'nome' => $usuario->getNome(),
+                    'email' => $usuario->getEmail(),
+                    'senha' => $usuario->getSenha()
+                ];
+
+                //Redireciona para a página de sucesso
+                header("Location: index.php?action=success");
                 exit;
             }
-
-            //Guarda o usuário na sessão para exibição após o cadastro
-            $_SESSION['usuario'] = [
-                'nome' => $usuario->getNome(),
-                'email' => $usuario->getEmail(),
-                'senha' => $usuario->getSenha()
-            ];
-
-            //Redireciona para a página de sucesso
-            header("Location: index.php?action=success");
-            exit;
-        }
         }
     }
 

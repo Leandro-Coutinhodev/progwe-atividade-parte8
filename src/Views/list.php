@@ -44,7 +44,7 @@
                 <div class="alert error"><?= htmlspecialchars($erro) ?></div>
             <?php endif; ?>
 
-            <form id="Frm" method="POST">
+            <form id="Frm" method="POST" onsubmit="return false">
             
                 <table>
                     <thead>

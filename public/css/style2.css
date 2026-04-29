@@ -1,0 +1,144 @@
+/* 1. RESET E BASE (A Fundação) 
+   Garante que todos os navegadores comecem do zero e respeitem os tamanhos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Impede que bordas aumentem o tamanho da caixa */
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+    background-color: #f1f5f9; /* Um cinza bem claro, padrão de sistemas */
+    color: #334155;
+    /* Flexbox no body para centralizar o formulário no meio da tela */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* 2. O CONTAINER PRINCIPAL (O Cartão Branco) */
+.container-cadastro {
+    background: #ffffff;
+    width: 100%;
+    max-width: 500px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* Sombra suave para dar profundidade */
+}
+
+/* 3. BARRA DE PROGRESSO (O Feedback de Localização) */
+.form-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.progresso {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.etapa-indicador {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #e2e8f0;
+    color: #64748b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    transition: all 0.3s ease; /* Transição suave de cor */
+}
+
+.etapa-indicador.ativo {
+    background-color: #2563eb; /* Azul profissional */
+    color: white;
+}
+
+/* 4. A MAGIA DO MULTI-STEP (Escondendo o que não importa) */
+fieldset {
+    border: none; /* Remove a borda padrão feia do HTML antigo */
+}
+
+legend {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #0f172a;
+}
+
+.etapa {
+    display: none; /* Esconde todas as etapas por padrão */
+    animation: fade-in 0.4s ease; /* Animação ao trocar de tela */
+}
+
+.etapa.ativa {
+    display: block; /* Mostra apenas a etapa com a classe 'ativa' */
+}
+
+/* Animação simples para não ser brusco */
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 5. CAMPOS DO FORMULÁRIO (Usabilidade) */
+.grupo-input {
+    margin-bottom: 20px;
+}
+
+.grupo-input label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.grupo-input input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s; /* Para o efeito do :focus */
+}
+
+/* ESTADO CRÍTICO DE IHC: O feedback de onde o usuário está digitando */
+.grupo-input input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); /* "Aura" azul ao redor */
+}
+
+/* 6. BOTÕES E ALINHAMENTOS (Flexbox novamente) */
+.acoes-form {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end; /* Alinha o botão à direita */
+}
+
+.acoes-form.espaco-entre {
+    justify-content: space-between; /* Um botão de cada lado */
+}
+
+button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-primario { background-color: #2563eb; color: white; }
+.btn-primario:hover { background-color: #1d4ed8; }
+
+.btn-secundario { background-color: #f1f5f9; color: #475569; }
+.btn-secundario:hover { background-color: #e2e8f0; }
+
+.btn-sucesso { background-color: #10b981; color: white; }
+.btn-sucesso:hover { background-color: #059669; }

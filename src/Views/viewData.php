@@ -13,6 +13,7 @@
             <div class="data-display">
                 <p><strong>Nome:</strong> <?= htmlspecialchars($usuario['nome']) ?></p>
                 <p><strong>E-mail:</strong> <?= htmlspecialchars($usuario['email']) ?></p>
+                <p><strong>Cpf:</strong> <?= htmlspecialchars($usuario['cpf']) ?></p>
                 <p><strong>Senha:</strong> <?= htmlspecialchars($usuario['senha']) ?></p>
             </div>
             

@@ -7,10 +7,17 @@ class UsuarioController
     public function index()
     {
         //Limpa possíveis mensagens de erro anteriores da sessão
-        $erro = $_SESSION['erro'] ?? null;
-        unset($_SESSION['erro']);
+        if ($_GET['action'] == 'new') {
+            $erro = $_SESSION['erro'] ?? null;
+            unset($_SESSION['erro']);
+            require '../src/Views/form.php';
+
+        }else{
+            $erro = $_SESSION['erro'] ?? null;
+            unset($_SESSION['erro']);
 
         require '../src/Views/forms.php';
+        }
     }
 
     public function list()
@@ -71,7 +78,8 @@ class UsuarioController
                 $_SESSION['usuario_access'] = [
                     'id' => $usuario['id'],
                     'nome' => $usuario['nome'],
-                    'email' => $usuario['email']
+                    'email' => $usuario['email'],
+                    'cpf' => $usuario['cpf']
                 ];
                 header("Location: index.php?action=list");
                 exit;
@@ -121,15 +129,16 @@ class UsuarioController
             $nome = trim($_POST['nome'] ?? '');
             $email = trim($_POST['email'] ?? '');
             $senha = trim($_POST['senha'] ?? '');
+            $cpf = trim($_POST['cpf'] ?? '');
 
 
             //Validação simples dos dados
-            if ((empty($nome) || empty($email) || empty($senha)) && isset($_GET['id'])) {
+            if ((empty($nome) || empty($email) || empty($senha) || empty($cpf)) && isset($_GET['id'])) {
                 $id = $_GET['id'];
                 $_SESSION['erro'] = "Todos os campos são obrigatórios.";
                 header("Location: index.php?action=editar&id={$id}");
                 exit;
-            } elseif ((empty($nome) || empty($email) || empty($senha))) {
+            } elseif ((empty($nome) || empty($email) || empty($senha) || empty($cpf))) {
                 $_SESSION['erro'] = "Todos os campos são obrigatórios.";
                 header("Location: index.php?action=new");
                 exit;
@@ -146,8 +155,10 @@ class UsuarioController
                 exit;
             }
 
+            $cpf = str_replace(['.', '-'], '', $cpf);
+
             //Instancia o Model (cria o objeto Usuario)
-            $usuario = new Usuario($nome, $email, $senha);
+            $usuario = new Usuario($nome, $email, $senha, $cpf);
 
             if (isset($_GET['id'])) {
                 if (isset($_SESSION['usuario_access'])) {
@@ -180,7 +191,8 @@ class UsuarioController
                 $_SESSION['usuario'] = [
                     'nome' => $usuario->getNome(),
                     'email' => $usuario->getEmail(),
-                    'senha' => $usuario->getSenha()
+                    'senha' => $usuario->getSenha(),
+                    'cpf' => $usuario->getCpf()
                 ];
 
                 //Redireciona para a página de sucesso

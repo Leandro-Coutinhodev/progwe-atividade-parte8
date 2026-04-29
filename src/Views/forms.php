@@ -61,6 +61,18 @@ if($_GET['action'] == 'editar') {
                     ?>
                     >    
                 </div>
+                <div class="input-group">
+                    <label for="email">Cpf:</label>
+                    <input type="text" id="cpf" name="cpf" placeholder=""
+                    <?php
+                    if(isset($_SESSION['usuario_edit'])){
+                        echo "value='{$_SESSION['usuario_edit']['cpf']}'";
+                    }
+                    ?>
+                    oninput="mascaraCPF(this)"
+                    >    
+                </div>
+                
 
                 <div class="input-group">
                     <label for="senha">Senha:</label>
@@ -81,6 +93,25 @@ if($_GET['action'] == 'editar') {
             </form>
         </div>
     </div>
+
+    <script>
+        function mascaraCPF(input) {
+            let valor = input.value;
+
+            // remove tudo que não é número
+            valor = valor.replace(/\D/g, '');
+
+            // limita a 11 dígitos
+            valor = valor.substring(0, 11);
+
+            // aplica a máscara
+            valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+            valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+            valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+            input.value = valor;
+        }
+    </script>
 </body>
 
 </html>

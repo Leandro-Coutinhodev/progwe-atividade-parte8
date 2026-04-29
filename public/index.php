@@ -8,6 +8,7 @@
     require_once "../src/Models/Usuario.php";
     require_once "../src/Controllers/UsuarioController.php";
 
+    
     //Define a ação padrão como index
     $action = $_GET['action'] ?? 'index';
 
